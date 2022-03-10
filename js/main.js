@@ -48,34 +48,44 @@ const carousel = [
 
 
 for (let i = 0 ; i < carousel.length ; i++){
-   document.querySelector('div.my-carousel-images').innerHTML += 
-	`<figure class="carousel-current-item position-relative">
-		<img src="${carousel[i].image}" alt="${carousel[i].title}">
-		<figcaption id="carusel-info" class="position-absolute bottom-0 end-0 text-white text-end p-5">
-		<h2>${carousel[i].title}</h2>
-		<p>${carousel[i].text}</p>
-		</figcaption>
-	</figure>`
-	document.querySelector('.my-thumbnails').innerHTML += 
-	`<img class="carousel-thumbnails-item my-filter float-left" src="${carousel[i].image}" alt="${carousel[i].title}">`
+	generateCarouselItem('div.my-carousel-images', '.my-thumbnails', carousel[i].image, carousel[i].title, carousel[i].text );
 }
 
-document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-outline-secondary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
+
+//creating dinamically a form group with a button that creates a new carousel element
+document.getElementById('my-after-carousel').innerHTML =`
+<div class="w-25 mx-auto">
+	<div class="form-group">
+		<label for="new-item-image">Enter image url</label>
+		<input type="text" class="form-control" id="new-item-image" placeholder="Enter url..">
+	</div>
+	<div class="form-group">
+		<label for="new-item-title">Enter title</label>
+		<input type="text" class="form-control" id="new-item-title" placeholder="Enter title..">
+	</div>
+	<div class="form-group mb-4">
+		<label for="new-item-text">Enter text</label>
+		<input type="text" class="form-control" id="new-item-text" placeholder="Enter text..">
+	</div>
+	<button type="submit" class="add-carousel-item btn btn-outline-secondary">Create new item</button>
+</div>
+`;
+
 
 let activeItem = 0;
 
+
+
 const carouselElements = document.getElementsByClassName('carousel-current-item');
 carouselElements[activeItem].classList.add('active');
-
 const carouselThumbnailsElements = document.getElementsByClassName('carousel-thumbnails-item');
-carouselThumbnailsElements[activeItem].classList.remove('my-filter');
-carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
 
-let sliderLoop;
+
+let sliderNextLoop;
 
 setTimeout(function() {
-	sliderNextLoop = setInterval ( slideNext, 1500, carouselElements, carouselThumbnailsElements, carousel);
-}, 5000 );
+	sliderNextLoop = setInterval ( slideNext, 1200, carouselElements, carouselThumbnailsElements, carousel);
+}, 7000 );
 
 
 document.querySelector('.my-next-hook').addEventListener ( 'click', function(){
@@ -87,11 +97,51 @@ document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
 	slideBack(carouselElements, carouselThumbnailsElements, carousel);
 })
 
+//creating dinamically a button that changes automated slider direction
+document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-outline-secondary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
+
+
 document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
 	clearInterval(sliderNextLoop);
-	const	sliderBackLoop = setInterval ( slideBack, 1500, carouselElements, carouselThumbnailsElements, carousel);
+	const	sliderBackLoop = setInterval ( slideBack, 1200, carouselElements, carouselThumbnailsElements, carousel);
 });
 
+
+
+document.querySelector('button.add-carousel-item').addEventListener ( 'click', function(){
+	const inputElements = document.querySelectorAll('input');
+	const newCarouselItem = {
+		image : document.getElementById('new-item-image').value,
+		title : document.getElementById('new-item-title').value,
+		text : document.getElementById('new-item-text').value
+	};
+	for ( let i = 0; i < inputElements.length; i++){
+	inputElements[i].value = '';
+	}
+	generateCarouselItem('div.my-carousel-images', '.my-thumbnails', newCarouselItem.image, newCarouselItem.title, newCarouselItem.text );
+});
+
+
+/**
+ * function that generates a new carousel item
+ * @param {*} carouselParentSelector carousel items parent dom element query selector
+ * @param {*} thumbsParentSelector thumbnails items parent dom element query selector
+ * @param {*} image new carousel item image
+ * @param {*} title new carousel title
+ * @param {*} text new carousel text
+ */
+function generateCarouselItem(carouselParentSelector, thumbsParentSelector, image, title, text){
+	document.querySelector(carouselParentSelector).innerHTML += 
+	`<figure class="carousel-current-item position-relative">
+		<img src="${image}" alt="${title}">
+		<figcaption id="carusel-info" class="position-absolute bottom-0 end-0 text-white text-end p-5">
+		<h2>${title}</h2>
+		<p>${text}</p>
+		</figcaption>
+	</figure>`
+	document.querySelector(thumbsParentSelector).innerHTML += 
+	`<img class="carousel-thumbnails-item my-filter" src="${image}" alt="${title}">`;
+}
 
 
 /**
@@ -103,7 +153,6 @@ document.querySelector('button.reverse-slider').addEventListener ( 'click', func
 function slideNext(carouselDOMElements, thumbnailsDOMElements, itemsList){
 	carouselDOMElements[activeItem].classList.remove('active');
 	thumbnailsDOMElements[activeItem].classList.add('my-filter');
-	thumbnailsDOMElements[activeItem].classList.remove('border', 'border-2');
 	if ( activeItem === itemsList.length - 1 ){
 		activeItem = 0;
 	} else {
@@ -111,7 +160,6 @@ function slideNext(carouselDOMElements, thumbnailsDOMElements, itemsList){
 	}
 	carouselDOMElements[activeItem].classList.add('active');
 	thumbnailsDOMElements[activeItem].classList.remove('my-filter');
-	thumbnailsDOMElements[activeItem].classList.add('border', 'border-2');
 };
 
 /**
@@ -122,7 +170,6 @@ function slideNext(carouselDOMElements, thumbnailsDOMElements, itemsList){
  */
 function slideBack(carouselDOMElements,thumbnailsDOMElements, itemsList){
 	carouselDOMElements[activeItem].classList.remove('active');
-	thumbnailsDOMElements[activeItem].classList.remove('border', 'border-2');
 	if ( activeItem === 0 ){
 		activeItem = itemsList.length - 1;
 	} else {
@@ -131,5 +178,4 @@ function slideBack(carouselDOMElements,thumbnailsDOMElements, itemsList){
 	thumbnailsDOMElements[activeItem].classList.add('my-filter');
 	carouselDOMElements[activeItem].classList.add('active');
 	thumbnailsDOMElements[activeItem].classList.remove('my-filter');
-	thumbnailsDOMElements[activeItem].classList.add('border', 'border-2');
 };
