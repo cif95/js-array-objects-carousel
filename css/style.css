@@ -62,13 +62,13 @@ div.my-next{
 div.my-previous > span::after{
 	font-family: "Font Awesome 5 Free";
 	font-weight: 900;
-	content: "\f7fb";
+	content: "\f104";
 	line-height: 30px;
 }
 
 div.my-next > span::after{
 	font-family: "Font Awesome 5 Free";
 	font-weight: 900;
-	content: "\f520";
+	content: "\f105";
 	line-height: 30px;
 }

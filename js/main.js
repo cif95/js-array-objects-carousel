@@ -60,7 +60,7 @@ for (let i = 0 ; i < carousel.length ; i++){
 	`<img class="carousel-thumbnails-item my-filter float-left" src="${carousel[i].image}" alt="${carousel[i].title}">`
 }
 
-document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-primary w-25 mx-auto rounded-3 mt-5">Reverse Slider Direction</button>`;
+document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-primary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
 
 let activeItem = 0;
 
@@ -75,7 +75,28 @@ carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
 let sliderLoop;
 
 setTimeout(function() {
-	sliderLoop = setInterval ( function(){
+	sliderNextLoop = setInterval ( slideNext, 1500);
+}, 7000 );
+
+
+document.querySelector('.my-next-hook').addEventListener ( 'click', function(){
+	slideNext();
+} );
+
+
+document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
+	slideBack();
+})
+
+document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
+	clearInterval(sliderNextLoop);
+	const	sliderBackLoop = setInterval ( slideBack, 1500);
+});
+
+
+
+//function that slides carousel image to the next one
+function slideNext(){
 	carouselElements[activeItem].classList.remove('active');
 	carouselThumbnailsElements[activeItem].classList.add('my-filter');
 	carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
@@ -87,103 +108,19 @@ setTimeout(function() {
 	carouselElements[activeItem].classList.add('active');
 	carouselThumbnailsElements[activeItem].classList.remove('my-filter');
 	carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
-	},1000)
-}, 4000 );
+};
 
-
-document.querySelector('.my-next-hook').addEventListener ( 'click', slideNext( carouselElements, activeItem, carouselThumbnailsElements, carousel ));
-	// carouselElements[activeItem].classList.remove('active');
-	// carouselThumbnailsElements[activeItem].classList.add('my-filter');
-	// carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
-	// if ( activeItem === carousel.length - 1 ){
-	// 	activeItem = 0;
-	// } else {
-	// 	activeItem++;
-	// }
-	// carouselElements[activeItem].classList.add('active');
-	// carouselThumbnailsElements[activeItem].classList.remove('my-filter');
-	// carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
-// );
-
-
-document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
+//function that slides carousel image to the previous one
+function slideBack(){
 	carouselElements[activeItem].classList.remove('active');
 	carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
-	decrementCarouselItemIndex(activeItem, carousel);
-	// if ( activeItem === 0 ){
-	// 	activeItem = carousel.length - 1;
-	// } else {
-	// 	activeItem--;
-	// }
+	if ( activeItem === 0 ){
+		activeItem = carousel.length - 1;
+	} else {
+		activeItem--;
+	}
 	carouselThumbnailsElements[activeItem].classList.add('my-filter');
 	carouselElements[activeItem].classList.add('active');
 	carouselThumbnailsElements[activeItem].classList.remove('my-filter');
 	carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
-})
-
-// document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
-// 	clearInterval(sliderLoop);
-// 	setTimeout(function() {
-// 		sliderLoop = setInterval ( function(){
-// 			carouselElements[activeItem].classList.remove('active');
-// 		carouselThumbnailsElements[activeItem].classList.add('my-filter');
-// 		carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
-// 		if ( activeItem === carousel.length - 1 ){
-// 			activeItem = 0;
-// 		} else {
-// 			activeItem--;
-// 		}
-// 		carouselElements[activeItem].classList.add('active');
-// 		carouselThumbnailsElements[activeItem].classList.remove('my-filter');
-// 		carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
-// 		},1000)
-// 	}, 1000 );
-// })
-
-
-
-function addClassToElementsWithAnIndex(domElementGroup, indexOfElements, classToAdd){
-	domElementGroup[indexOfElements].classList.add(classToAdd);
-}
-
-function removeClassToElementsWithAnIndex(domElementGroup, indexOfElements, classToAdd){
-	domElementGroup[indexOfElements].classList.remove('classToAdd');
-}
-
-function decrementCarouselItemIndex(itemIndex, itemList) {
-	if ( itemIndex === 0 ){
-		itemIndex = itemList.length - 1;
-	} else {
-		itemIndex--;
-	}
-}
-
-function incrementCarouselItemIndex(itemIndex, itemList) {
-	if ( itemIndex === 0 ){
-		itemIndex = itemList.length - 1;
-	} else {
-		itemIndex++;
-	}
-}
-
-
-/**
- * Function that slides to the next element of a list 
- * @param {*} elementsToSlide principal item to slide next
- * @param {*} indexOfCurrentElement index of item in a list
- * @param {*} thumbnailsToSlide thumbnails to slide next
- * @param {*} elementsList list of all items
- */
-function slideNext(elementsToSlide, indexOfCurrentElement, thumbnailsToSlide, elementsList ){
-	elementsToSlide[indexOfCurrentElement].classList.remove('active');
-	thumbnailsToSlide[indexOfCurrentElement].classList.add('my-filter');
-	thumbnailsToSlide[indexOfCurrentElement].classList.remove('border', 'border-2');
-	if ( indexOfCurrentElement === elementsList.length - 1 ){
-		indexOfCurrentElement = 0;
-	} else {
-		indexOfCurrentElement++;
-	}
-	elementsToSlide[indexOfCurrentElement].classList.add('active');
-	thumbnailsToSlide[indexOfCurrentElement].classList.remove('my-filter');
-	thumbnailsToSlide[indexOfCurrentElement].classList.add('border', 'border-2');
-}
+};
