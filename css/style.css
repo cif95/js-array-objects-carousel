@@ -1,6 +1,7 @@
 body{
 	font-family: "Montserrat", sans-serif;
-	background-color: azure;
+	background-color: #81D8D0;
+	overflow: hidden;
 }
 
 .my-filter{
@@ -10,8 +11,8 @@ body{
 .carousel-thumbnails-item{
 	display: inline-block;
 	border-radius:20px;
-	box-shadow:1px 1px 10px 10px rgb(82, 82, 82);
-	min-width:150px;
+	box-shadow:1px 5px 8px 6px rgba(0, 0, 0, 0.37);
+	min-width:147px;
 	height:80px;
 	margin:0 5px;
 }
@@ -20,7 +21,7 @@ figure.carousel-current-item{
 	border-radius:10px;
 	display: none;
 	overflow: hidden;
-	box-shadow:1px 1px 14px 10px rgb(73, 73, 73);
+	box-shadow:1px 5px 8px 6px rgba(0, 0, 0, 0.37)
 }
 
 figure.carousel-current-item.active{

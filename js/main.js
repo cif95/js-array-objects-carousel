@@ -60,7 +60,7 @@ for (let i = 0 ; i < carousel.length ; i++){
 	`<img class="carousel-thumbnails-item my-filter float-left" src="${carousel[i].image}" alt="${carousel[i].title}">`
 }
 
-document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-primary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
+document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-outline-secondary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
 
 let activeItem = 0;
 
@@ -71,56 +71,65 @@ const carouselThumbnailsElements = document.getElementsByClassName('carousel-thu
 carouselThumbnailsElements[activeItem].classList.remove('my-filter');
 carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
 
-
 let sliderLoop;
 
 setTimeout(function() {
-	sliderNextLoop = setInterval ( slideNext, 1500);
-}, 7000 );
+	sliderNextLoop = setInterval ( slideNext, 1500, carouselElements, carouselThumbnailsElements, carousel);
+}, 5000 );
 
 
 document.querySelector('.my-next-hook').addEventListener ( 'click', function(){
-	slideNext();
+	slideNext(carouselElements, carouselThumbnailsElements, carousel);
 } );
 
 
 document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
-	slideBack();
+	slideBack(carouselElements, carouselThumbnailsElements, carousel);
 })
 
 document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
 	clearInterval(sliderNextLoop);
-	const	sliderBackLoop = setInterval ( slideBack, 1500);
+	const	sliderBackLoop = setInterval ( slideBack, 1500, carouselElements, carouselThumbnailsElements, carousel);
 });
 
 
 
-//function that slides carousel image to the next one
-function slideNext(){
-	carouselElements[activeItem].classList.remove('active');
-	carouselThumbnailsElements[activeItem].classList.add('my-filter');
-	carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
-	if ( activeItem === carousel.length - 1 ){
+/**
+ * function that slides carousel image to the next one
+ * @param {*} carouselDOMElements dom elements of carousel
+ * @param {*} thumbnailsDOMElements thumbnails dom elements of carousel
+ * @param {*} itemsList list of carousel items
+ */
+function slideNext(carouselDOMElements, thumbnailsDOMElements, itemsList){
+	carouselDOMElements[activeItem].classList.remove('active');
+	thumbnailsDOMElements[activeItem].classList.add('my-filter');
+	thumbnailsDOMElements[activeItem].classList.remove('border', 'border-2');
+	if ( activeItem === itemsList.length - 1 ){
 		activeItem = 0;
 	} else {
 		activeItem++;
 	}
-	carouselElements[activeItem].classList.add('active');
-	carouselThumbnailsElements[activeItem].classList.remove('my-filter');
-	carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
+	carouselDOMElements[activeItem].classList.add('active');
+	thumbnailsDOMElements[activeItem].classList.remove('my-filter');
+	thumbnailsDOMElements[activeItem].classList.add('border', 'border-2');
 };
 
-//function that slides carousel image to the previous one
-function slideBack(){
-	carouselElements[activeItem].classList.remove('active');
-	carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
+/**
+ * function that slides carousel image to the previous one
+ * @param {*} carouselDOMElements dom elements of carousel
+ * @param {*} thumbnailsDOMElements thumbnails dom elements of carousel
+ * @param {*} itemsList list of carousel items
+ */
+function slideBack(carouselDOMElements,thumbnailsDOMElements, itemsList){
+	carouselDOMElements[activeItem].classList.remove('active');
+	thumbnailsDOMElements[activeItem].classList.remove('border', 'border-2');
 	if ( activeItem === 0 ){
-		activeItem = carousel.length - 1;
+		activeItem = itemsList.length - 1;
 	} else {
 		activeItem--;
 	}
-	carouselThumbnailsElements[activeItem].classList.add('my-filter');
-	carouselElements[activeItem].classList.add('active');
-	carouselThumbnailsElements[activeItem].classList.remove('my-filter');
-	carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
+	thumbnailsDOMElements[activeItem].classList.add('my-filter');
+	carouselDOMElements[activeItem].classList.add('active');
+	thumbnailsDOMElements[activeItem].classList.remove('my-filter');
+	thumbnailsDOMElements[activeItem].classList.add('border', 'border-2');
 };
