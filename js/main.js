@@ -91,29 +91,30 @@ setTimeout(function() {
 }, 4000 );
 
 
-document.querySelector('.my-next-hook').addEventListener ( 'click', function(){
-	carouselElements[activeItem].classList.remove('active');
-	carouselThumbnailsElements[activeItem].classList.add('my-filter');
-	carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
-	if ( activeItem === carousel.length - 1 ){
-		activeItem = 0;
-	} else {
-		activeItem++;
-	}
-	carouselElements[activeItem].classList.add('active');
-	carouselThumbnailsElements[activeItem].classList.remove('my-filter');
-	carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
-} );
+document.querySelector('.my-next-hook').addEventListener ( 'click', slideNext( carouselElements, activeItem, carouselThumbnailsElements, carousel ));
+	// carouselElements[activeItem].classList.remove('active');
+	// carouselThumbnailsElements[activeItem].classList.add('my-filter');
+	// carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
+	// if ( activeItem === carousel.length - 1 ){
+	// 	activeItem = 0;
+	// } else {
+	// 	activeItem++;
+	// }
+	// carouselElements[activeItem].classList.add('active');
+	// carouselThumbnailsElements[activeItem].classList.remove('my-filter');
+	// carouselThumbnailsElements[activeItem].classList.add('border', 'border-2');
+// );
 
 
 document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
 	carouselElements[activeItem].classList.remove('active');
 	carouselThumbnailsElements[activeItem].classList.remove('border', 'border-2');
-	if ( activeItem === 0 ){
-		activeItem = carousel.length - 1;
-	} else {
-		activeItem--;
-	}
+	decrementCarouselItemIndex(activeItem, carousel);
+	// if ( activeItem === 0 ){
+	// 	activeItem = carousel.length - 1;
+	// } else {
+	// 	activeItem--;
+	// }
 	carouselThumbnailsElements[activeItem].classList.add('my-filter');
 	carouselElements[activeItem].classList.add('active');
 	carouselThumbnailsElements[activeItem].classList.remove('my-filter');
@@ -141,26 +142,48 @@ document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
 
 
 
-// function addClassToElementsWithAnIndex(domElementGroup, indexOfElements, classToAdd){
-// 	domElementGroup[indexOfElements].classList.add(classToAdd);
-// }
+function addClassToElementsWithAnIndex(domElementGroup, indexOfElements, classToAdd){
+	domElementGroup[indexOfElements].classList.add(classToAdd);
+}
 
-// function removeClassToElementsWithAnIndex(domElementGroup, indexOfElements, classToAdd){
-// 	domElementGroup[indexOfElements].classList.remove('classToAdd');
-// }
+function removeClassToElementsWithAnIndex(domElementGroup, indexOfElements, classToAdd){
+	domElementGroup[indexOfElements].classList.remove('classToAdd');
+}
 
-// function decrementCarouselItemIndex(itemIndex, itemList) {
-// 	if ( itemIndex === 0 ){
-// 		itemIndex = itemList.length - 1;
-// 	} else {
-// 		itemIndex--;
-// 	}
-// }
+function decrementCarouselItemIndex(itemIndex, itemList) {
+	if ( itemIndex === 0 ){
+		itemIndex = itemList.length - 1;
+	} else {
+		itemIndex--;
+	}
+}
 
-// function incrementCarouselItemIndex(itemIndex, itemList) {
-// 	if ( itemIndex === 0 ){
-// 		itemIndex = itemList.length - 1;
-// 	} else {
-// 		itemIndex++;
-// 	}
-// }
+function incrementCarouselItemIndex(itemIndex, itemList) {
+	if ( itemIndex === 0 ){
+		itemIndex = itemList.length - 1;
+	} else {
+		itemIndex++;
+	}
+}
+
+
+/**
+ * Function that slides to the next element of a list 
+ * @param {*} elementsToSlide principal item to slide next
+ * @param {*} indexOfCurrentElement index of item in a list
+ * @param {*} thumbnailsToSlide thumbnails to slide next
+ * @param {*} elementsList list of all items
+ */
+function slideNext(elementsToSlide, indexOfCurrentElement, thumbnailsToSlide, elementsList ){
+	elementsToSlide[indexOfCurrentElement].classList.remove('active');
+	thumbnailsToSlide[indexOfCurrentElement].classList.add('my-filter');
+	thumbnailsToSlide[indexOfCurrentElement].classList.remove('border', 'border-2');
+	if ( indexOfCurrentElement === elementsList.length - 1 ){
+		indexOfCurrentElement = 0;
+	} else {
+		indexOfCurrentElement++;
+	}
+	elementsToSlide[indexOfCurrentElement].classList.add('active');
+	thumbnailsToSlide[indexOfCurrentElement].classList.remove('my-filter');
+	thumbnailsToSlide[indexOfCurrentElement].classList.add('border', 'border-2');
+}
