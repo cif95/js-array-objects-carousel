@@ -75,7 +75,6 @@ document.getElementById('my-after-carousel').innerHTML =`
 let activeItem = 0;
 
 
-
 const carouselElements = document.getElementsByClassName('carousel-current-item');
 carouselElements[activeItem].classList.add('active');
 const carouselThumbnailsElements = document.getElementsByClassName('carousel-thumbnails-item');
@@ -84,7 +83,7 @@ const carouselThumbnailsElements = document.getElementsByClassName('carousel-thu
 let sliderNextLoop;
 
 setTimeout(function() {
-	sliderNextLoop = setInterval ( slideNext, 1200, carouselElements, carouselThumbnailsElements, carousel);
+	sliderNextLoop = setInterval ( slideNext, 2000, carouselElements, carouselThumbnailsElements, carousel);
 }, 7000 );
 
 
@@ -95,16 +94,16 @@ document.querySelector('.my-next-hook').addEventListener ( 'click', function(){
 
 document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
 	slideBack(carouselElements, carouselThumbnailsElements, carousel);
-})
-
-//creating dinamically a button that changes automated slider direction
-document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-outline-secondary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
-
-
-document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
-	clearInterval(sliderNextLoop);
-	const	sliderBackLoop = setInterval ( slideBack, 1200, carouselElements, carouselThumbnailsElements, carousel);
 });
+
+// //creating dinamically a button that changes automated slider direction
+// document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-outline-secondary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
+
+
+// document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
+// 	clearInterval(sliderNextLoop);
+// 	const	sliderBackLoop = setInterval ( slideBack, 1200, carouselElements, carouselThumbnailsElements, carousel);
+// });
 
 
 
@@ -115,6 +114,7 @@ document.querySelector('button.add-carousel-item').addEventListener ( 'click', f
 		title : document.getElementById('new-item-title').value,
 		text : document.getElementById('new-item-text').value
 	};
+	carousel.push(newCarouselItem);
 	for ( let i = 0; i < inputElements.length; i++){
 	inputElements[i].value = '';
 	}
@@ -122,6 +122,10 @@ document.querySelector('button.add-carousel-item').addEventListener ( 'click', f
 });
 
 
+
+
+
+// ! functions below !
 /**
  * function that generates a new carousel item
  * @param {*} carouselParentSelector carousel items parent dom element query selector
@@ -144,6 +148,8 @@ function generateCarouselItem(carouselParentSelector, thumbsParentSelector, imag
 }
 
 
+
+// ! TO DO -> Create one function only
 /**
  * function that slides carousel image to the next one
  * @param {*} carouselDOMElements dom elements of carousel
