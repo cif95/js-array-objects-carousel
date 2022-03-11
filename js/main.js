@@ -45,83 +45,53 @@ const carousel = [
 	}
 ];
 
-
-
+// creating dinamically carousel items and thumbnails
 for (let i = 0 ; i < carousel.length ; i++){
 	generateCarouselItem('div.my-carousel-images', '.my-thumbnails', carousel[i].image, carousel[i].title, carousel[i].text );
 }
 
 
-//creating dinamically a form group with a button that creates a new carousel element
-document.getElementById('my-after-carousel').innerHTML =`
-<div class="w-25 mx-auto">
-	<div class="form-group">
-		<label for="new-item-image">Enter image url</label>
-		<input type="text" class="form-control" id="new-item-image" placeholder="Enter url..">
-	</div>
-	<div class="form-group">
-		<label for="new-item-title">Enter title</label>
-		<input type="text" class="form-control" id="new-item-title" placeholder="Enter title..">
-	</div>
-	<div class="form-group mb-4">
-		<label for="new-item-text">Enter text</label>
-		<input type="text" class="form-control" id="new-item-text" placeholder="Enter text..">
-	</div>
-	<button type="submit" class="add-carousel-item btn btn-outline-secondary">Create new item</button>
-</div>
-`;
-
+//creating dinamically a button to reverse automatic slide direction, 
+//a form group with input text 
+// and a button that creates a new carousel element from input values
+document.getElementById('my-before-carousel').innerHTML =`
+<button class="reverse-slider btn btn-outline-secondary mx-auto">Reverse Slider Direction</button>`;
 
 let activeItem = 0;
-
+let isSlideNext = true;
 
 const carouselElements = document.getElementsByClassName('carousel-current-item');
 carouselElements[activeItem].classList.add('active');
 const carouselThumbnailsElements = document.getElementsByClassName('carousel-thumbnails-item');
+carouselThumbnailsElements[activeItem].classList.add('active');
+
+// setting an automatic carousel slide that starts after 4s
+setTimeout(function(){
+	let autoSlide = setInterval(function(){
+		if (isSlideNext) {
+			document.querySelector('.my-next-hook').click();
+		}
+		else {
+			document.querySelector('.my-prev-hook').click();
+		}
+		}, 2000);
+}, 4000);
 
 
-let sliderNextLoop;
-
-setTimeout(function() {
-	sliderNextLoop = setInterval ( slideNext, 2000, carouselElements, carouselThumbnailsElements, carousel);
-}, 7000 );
-
-
+// carousel slides onwards on click of right arrow icon 
 document.querySelector('.my-next-hook').addEventListener ( 'click', function(){
 	slideNext(carouselElements, carouselThumbnailsElements, carousel);
 } );
 
-
+// carousel slides backwards on click of right arrow icon 
 document.querySelector('.my-prev-hook').addEventListener ( 'click', function() {
 	slideBack(carouselElements, carouselThumbnailsElements, carousel);
 });
 
-// //creating dinamically a button that changes automated slider direction
-// document.querySelector('.my-carousel-container').innerHTML += `<button class="reverse-slider btn btn-outline-secondary w-25 mx-auto rounded-pill mt-5">Reverse Slider Direction</button>`;
-
-
-// document.querySelector('button.reverse-slider').addEventListener ( 'click', function(){
-// 	clearInterval(sliderNextLoop);
-// 	const	sliderBackLoop = setInterval ( slideBack, 1200, carouselElements, carouselThumbnailsElements, carousel);
-// });
-
-
-
-document.querySelector('button.add-carousel-item').addEventListener ( 'click', function(){
-	const inputElements = document.querySelectorAll('input');
-	const newCarouselItem = {
-		image : document.getElementById('new-item-image').value,
-		title : document.getElementById('new-item-title').value,
-		text : document.getElementById('new-item-text').value
-	};
-	carousel.push(newCarouselItem);
-	for ( let i = 0; i < inputElements.length; i++){
-	inputElements[i].value = '';
-	}
-	generateCarouselItem('div.my-carousel-images', '.my-thumbnails', newCarouselItem.image, newCarouselItem.title, newCarouselItem.text );
-});
-
-
+// carousel automatically slides in the opposite direction when button reverse is clicked
+document.querySelector('.reverse-slider').addEventListener('click', function(){
+	isSlideNext = !isSlideNext;
+})
 
 
 
@@ -144,12 +114,10 @@ function generateCarouselItem(carouselParentSelector, thumbsParentSelector, imag
 		</figcaption>
 	</figure>`
 	document.querySelector(thumbsParentSelector).innerHTML += 
-	`<img class="carousel-thumbnails-item my-filter" src="${image}" alt="${title}">`;
+	`<img class="carousel-thumbnails-item" src="${image}" alt="${title}">`;
 }
 
 
-
-// ! TO DO -> Create one function only
 /**
  * function that slides carousel image to the next one
  * @param {*} carouselDOMElements dom elements of carousel
@@ -158,14 +126,14 @@ function generateCarouselItem(carouselParentSelector, thumbsParentSelector, imag
  */
 function slideNext(carouselDOMElements, thumbnailsDOMElements, itemsList){
 	carouselDOMElements[activeItem].classList.remove('active');
-	thumbnailsDOMElements[activeItem].classList.add('my-filter');
+	thumbnailsDOMElements[activeItem].classList.remove('active');
 	if ( activeItem === itemsList.length - 1 ){
 		activeItem = 0;
 	} else {
 		activeItem++;
 	}
 	carouselDOMElements[activeItem].classList.add('active');
-	thumbnailsDOMElements[activeItem].classList.remove('my-filter');
+	thumbnailsDOMElements[activeItem].classList.add('active');
 };
 
 /**
@@ -176,12 +144,12 @@ function slideNext(carouselDOMElements, thumbnailsDOMElements, itemsList){
  */
 function slideBack(carouselDOMElements,thumbnailsDOMElements, itemsList){
 	carouselDOMElements[activeItem].classList.remove('active');
+	thumbnailsDOMElements[activeItem].classList.remove('active');
 	if ( activeItem === 0 ){
 		activeItem = itemsList.length - 1;
 	} else {
 		activeItem--;
 	}
-	thumbnailsDOMElements[activeItem].classList.add('my-filter');
 	carouselDOMElements[activeItem].classList.add('active');
-	thumbnailsDOMElements[activeItem].classList.remove('my-filter');
+	thumbnailsDOMElements[activeItem].classList.add('active');
 };
